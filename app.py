@@ -22,7 +22,10 @@ class Machines(db.Model):
 def index():
     if request.method == 'POST':
         ip = request.form['ip']
-        socket_utility = SocketUtility(ip, "", "")
+        port = request.form['port']
+        username = request.form['username']
+        password = request.form['password']
+        socket_utility = SocketUtility(ip, port, username, password)
         os = socket_utility.get_os()
         ram = socket_utility.get_ram()
         rom = socket_utility.get_hard_disks()
@@ -44,20 +47,6 @@ def delete(id):
     machine_to_delete = Machines.query.get_or_404(id)
     try:
         db.session.delete(machine_to_delete)
-        db.session.commit()
-        return redirect('/')
-    except:
-        return 'There was an error'
-
-
-@app.route('/update/<int:id>', methods=['GET'])
-def update(id):
-    machine = Machines.query.get_or_404(id)
-    socket_utility = SocketUtility(machine.ip, "", "")
-    machine.os = socket_utility.get_os()
-    machine.ram = socket_utility.get_ram()
-    machine.rom = socket_utility.get_hard_disks()
-    try:
         db.session.commit()
         return redirect('/')
     except:
