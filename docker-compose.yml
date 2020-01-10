@@ -1,0 +1,7 @@
+version: '3.2'
+services:
+  backend:
+    image: ubuntu:latest
+    ports:
+    - 22:25
+    tty: true

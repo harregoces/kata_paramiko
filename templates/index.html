@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>Index</title>
+{% endblock %}
+
+{% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="{{ url_for('static', filename='dashboard/dashboard.js') }}"></script>
+{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard/dashboard.css') }}">
+{% endblock %}
+{% block body %}
+
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Company name</a>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="#">Sign out</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <span data-feather="home"></span>
+                                Dashboard <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Dashboard</h1>
+                </div>
+
+                <form class="form-inline" method="POST" action="/">
+                    <div class="form-group row col-sm-12">
+                        <div class="col">
+                            <label for="ip" class="col-form-label">IP :</label>
+                            <input type="text" class="form-control" name="ip" id="ip" placeholder="0.0.0.0" required
+                                   pattern="^([0-9]{1,3}\.){3}[0-9]{1,3}$">
+                        </div>
+                        <div class="col">
+                            <label for="port" class="col-form-label">Port :</label>
+                            <input type="text" class="form-control" name="port" id="port" placeholder="22" required>
+                        </div>
+                        <div class="col">
+                            <label for="username" class="col-form-label">Username :</label>
+                            <input type="text" class="form-control" name="username" id="username" placeholder="Password" required>
+                        </div>
+                        <div class="col">
+                            <label for="password" class="col-form-label">Password :</label>
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Check machine</button>
+                        </div>
+                    </div>
+                </form>
+
+                <h2>Machines</h2>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>IP</th>
+                            <th>SO</th>
+                            <th>RAM</th>
+                            <th>ROM</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for machine in machines %}
+                            <tr>
+                                <td>
+                                    <a href="/update/{{ machine.id }}">Update</a>
+                                    <br/>
+                                    <a href="/delete/{{ machine.id }}">Delete</a>
+                                </td>
+                                <td>{{ machine.ip }}</td>
+                                <td>{{ machine.os }}</td>
+                                <td>{{ machine.ram }}</td>
+                                <td>{{ machine.rom|safe }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+{% endblock %}
